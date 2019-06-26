@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -15,6 +16,10 @@ mongoose
 	.connect(db, { useNewUrlParser: true })
 	.then(() => console.log('MongoDB connected.'))
 	.catch((err) => console.log(err));
+
+//Body-parser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
 	res.send('Hello world!');
