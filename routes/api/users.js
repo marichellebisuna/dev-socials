@@ -16,7 +16,7 @@ router.get('/test', (req, res) => {
 module.exports = router;
 
 //@route  /api/users/register
-//@desc   Test users url connection
+//@desc   User registration
 //@access PUBLIC
 
 router.post('/register', (req, res) => {
@@ -45,4 +45,28 @@ router.post('/register', (req, res) => {
 			});
 		})
 		.catch((err) => console.log(err));
+});
+//@route  /api/users/login
+//@desc   User login with token
+//@access PUBLIC
+
+router.post('/login', (req, res) => {
+	User.findOne({ email: req.body.email }).then((user) => {
+		//Check User
+		if (!user) {
+			res.status(400).json({ email: 'User not found.' });
+		}
+
+		//Check Password
+		bcrypt
+			.compare(req.body.password, user.password)
+			.then((isMatch) => {
+				if (isMatch) {
+					res.json({ msg: 'Login success.' });
+				} else {
+					return res.status(404).json({ password: 'Password incorrect.' });
+				}
+			})
+			.catch((err) => console.log(err));
+	});
 });
