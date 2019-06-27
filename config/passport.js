@@ -11,17 +11,16 @@ opts.secretOrKey = keys.secretOrKey;
 module.exports = (passport) => {
 	passport.use(
 		new JwtStrategy(opts, (jwt_payload, done) => {
-			User.findOne({ id: jwt_payload.sub }, (err, user) => {
-				if (err) {
-					return done(err, false);
-				}
-				if (user) {
-					return done(null, user);
-				} else {
-					return done(null, false);
-					// or you could create a new account
-				}
-			});
+			User.findById(jwt_payload.id)
+				.then((user) => {
+					if (user) {
+						return done(null, user);
+					} else {
+						return done(null, false);
+						// or you could create a new account
+					}
+				})
+				.catch((err) => console.log(err));
 		})
 	);
 };
