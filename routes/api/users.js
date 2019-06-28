@@ -68,7 +68,7 @@ router.post('/login', (req, res) => {
 		//Check User
 		if (!user) {
 			errors.email = 'User not found.';
-			res.status(400).json({ msg: 'User not found.' });
+			res.status(400).json(errors);
 		}
 
 		//Check Password
@@ -87,7 +87,7 @@ router.post('/login', (req, res) => {
 					});
 				} else {
 					errors.password = 'Password incorrect.';
-					return res.status(404).json({ password: 'Password incorrect.' });
+					return res.status(404).json(errors);
 				}
 			})
 			.catch((err) => console.log(err));
